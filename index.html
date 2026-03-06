@@ -1575,8 +1575,6 @@
   const stepsEl = document.querySelector('.steps');
   if (stepsEl) {
     const stepItems = stepsEl.querySelectorAll('.step');
-    let currentStep = 0;
-    let cycleTimer = null;
 
     function activateStep(i) {
       stepItems.forEach((el, idx) => el.classList.toggle('is-active', idx === i));
@@ -1585,15 +1583,19 @@
     function startCycling() {
       stepsEl.classList.add('is-cycling');
       activateStep(0);
-      cycleTimer = setInterval(() => {
-        currentStep = (currentStep + 1) % stepItems.length;
-        activateStep(currentStep);
-      }, 2500);
+      stepItems.forEach((_, i) => {
+        if (i === 0) return;
+        setTimeout(() => activateStep(i), i * 2500);
+      });
+      setTimeout(() => {
+        stepItems.forEach(el => el.classList.remove('is-active'));
+        stepsEl.classList.remove('is-cycling');
+      }, stepItems.length * 2500);
     }
 
     const stepsObs = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting && !cycleTimer) {
+        if (entry.isIntersecting) {
           setTimeout(startCycling, 700);
           stepsObs.unobserve(stepsEl);
         }
