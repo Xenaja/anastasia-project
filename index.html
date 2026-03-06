@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Анастасия Анохина — Тренер творческих состояний</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════════════ TOKENS ══════════════════════════════ */
+    :root {
+      --bg:        #FAFAF6;
+      --text:      #1C1C1E;
+      --soft:      #6B6B70;
+      --line:      #D8D3C8;
+      --cream:     #F0EBE0;
+      --lavender:  #EDE8F5;
+      --dark:      #16161A;
+
+      --c-purple:  #9B6BB5;
+      --c-blue:    #5B82C0;
+      --c-sky:     #7EB8D4;
+      --c-green:   #6BAE78;
+      --c-yellow:  #D4B84A;
+      --c-orange:  #E08C50;
+      --c-red:     #C96055;
+
+      --f-display: 'Playfair Display', Georgia, serif;
+      --f-body:    'Inter', system-ui, sans-serif;
+      --f-ui:      'Inter', system-ui, sans-serif;
+
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --radius: 20px;
+    }
+
+    /* ═══════════════════════════════ RESET ═══════════════════════════════ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--f-body);
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    a   { text-decoration: none; color: inherit; }
+
+    /* Subtle grain texture */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ═══════════════════════════════ TYPOGRAPHY HELPERS ═════════════════ */
+    .label {
+      font-family: var(--f-ui);
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--soft);
+    }
+    .display {
+      font-family: var(--f-display);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.1;
+    }
+
+    /* ═══════════════════════════════ NAV ════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 72px;
+      background: rgba(250, 250, 246, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+    .nav.scrolled { border-color: var(--line); }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-logo {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+    .nav-logo img { object-fit: contain; }
+    .nav-name {
+      font-family: var(--f-display);
+      font-style: italic;
+      font-size: 1.15rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--f-ui);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--soft);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* Hamburger */
+    .burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px;
+    }
+    .burger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--text);
+      transition: all 0.3s var(--ease);
+      transform-origin: center;
+    }
+    .burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* Mobile nav dropdown */
+    .nav-mobile {
+      display: none;
+      position: fixed;
+      top: 72px; left: 0; right: 0;
+      background: rgba(250, 250, 246, 0.97);
+      backdrop-filter: blur(20px);
+      padding: 32px 24px 40px;
+      z-index: 499;
+      border-bottom: 1px solid var(--line);
+      transform: translateY(-20px);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.35s var(--ease);
+    }
+    .nav-mobile.open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .nav-mobile ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .nav-mobile ul a {
+      font-family: var(--f-display);
+      font-style: italic;
+      font-size: 1.5rem;
+      color: var(--text);
+    }
+
+    /* ═══════════════════════════════ HERO ═══════════════════════════════ */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 100px 48px 80px;
+      gap: 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: slideUp 0.9s 0.1s var(--ease) forwards;
+    }
+
+    .hero-name {
+      font-family: var(--f-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(3.8rem, 6.5vw, 6rem);
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: slideUp 0.9s 0.25s var(--ease) forwards;
+    }
+
+    .hero-title {
+      font-family: var(--f-display);
+      font-style: italic;
+      font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+      color: var(--soft);
+      margin-bottom: 28px;
+      line-height: 1.6;
+      opacity: 0;
+      animation: slideUp 0.9s 0.4s var(--ease) forwards;
+    }
+
+    .hero-desc {
+      font-family: var(--f-body);
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--soft);
+      max-width: 400px;
+      margin-bottom: 44px;
+      opacity: 0;
+      animation: slideUp 0.9s 0.55s var(--ease) forwards;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: slideUp 0.9s 0.7s var(--ease) forwards;
+    }
+
+    /* ═══════════════════════════════ BUTTONS ════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 32px;
+      font-family: var(--f-ui);
+      font-size: 0.82rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      border-radius: 100px;
+      transition:
+        background-color 0.35s var(--ease),
+        color            0.35s var(--ease),
+        border-color     0.35s var(--ease),
+        transform        0.35s var(--ease),
+        box-shadow       0.35s var(--ease);
+      white-space: nowrap;
+    }
+    .btn-dark {
+      background: var(--text);
+      color: var(--bg);
+    }
+    .btn-dark:hover {
+      background: var(--c-purple);
+      box-shadow: 0 10px 28px rgba(155, 107, 181, 0.3);
+      transform: translateY(-2px);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid var(--line);
+    }
+    .btn-outline:hover {
+      border-color: var(--text);
+      background: var(--text);
+      color: var(--bg);
+      transform: translateY(-2px);
+    }
+    .btn-arrow { transition: transform 0.3s var(--ease); }
+    .btn:hover .btn-arrow { transform: translateX(4px); }
+
+    /* ═══════════════════════════════ HERO PHOTO ═════════════════════════ */
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      animation: fadeIn 1.2s 0.4s var(--ease) forwards;
+    }
+
+    .hero-photo-wrap {
+      position: relative;
+      width: min(420px, 100%);
+    }
+
+    .hero-photo-frame {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      border-radius: 200px 200px 160px 160px;
+      overflow: hidden;
+      position: relative;
+    }
+    /* Leave breathing room above the head */
+    .hero-photo-frame img {
+      object-position: center 12%;
+    }
+
+    /* Decorative color dots echoing the logo */
+    .hero-dot {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.7;
+    }
+    .hero-dot-1 { width: 64px; height: 64px; background: var(--c-purple); top: -20px; right: -20px; opacity: 0.2; }
+    .hero-dot-2 { width: 44px; height: 44px; background: var(--c-sky);    bottom: 80px; left: -28px; opacity: 0.25; }
+    .hero-dot-3 { width: 32px; height: 32px; background: var(--c-orange);  bottom: -12px; right: 40px; opacity: 0.3; }
+
+    /* Logo badge — bottom-left corner of the photo */
+    .hero-logo-badge {
+      position: absolute;
+      bottom: 20px;
+      left: -20px;
+      width: 108px;
+      height: 108px;
+    }
+    .hero-logo-badge img {
+      object-fit: contain;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ═══════════════════════════════ MARQUEE ════════════════════════════ */
+    .marquee-strip {
+      background: var(--dark);
+      color: white;
+      padding: 18px 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .marquee-track {
+      display: flex;
+      gap: 0;
+      animation: marquee 28s linear infinite;
+      width: max-content;
+    }
+    .marquee-text {
+      font-family: var(--f-display);
+      font-style: italic;
+      font-size: 1.15rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      padding-right: 64px;
+      color: rgba(255,255,255,0.9);
+    }
+    .marquee-dot {
+      color: var(--c-purple);
+      margin: 0 20px;
+      font-style: normal;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ═══════════════════════════════ PHILOSOPHY ═════════════════════════ */
+    .philosophy {
+      padding: 130px 48px;
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .philosophy .label { display: block; margin-bottom: 52px; }
+    .philosophy-quote {
+      font-family: var(--f-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(1.65rem, 2.8vw, 2.4rem);
+      line-height: 1.55;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+    .philosophy-line {
+      width: 1px;
+      height: 60px;
+      background: var(--line);
+      margin: 0 auto 40px;
+    }
+    .philosophy-text {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--soft);
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    /* Logo spiral illustration in philosophy */
+    .philosophy-logo {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 40px;
+    }
+    .philosophy-logo img {
+      object-fit: contain;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ═══════════════════════════════ FOR WHOM ═══════════════════════════ */
+    .for-whom {
+      background: var(--cream);
+      padding: 110px 48px;
+    }
+    .for-whom-inner { max-width: 1200px; margin: 0 auto; }
+    .section-head {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 64px;
+    }
+    .section-head.center { align-items: center; text-align: center; }
+    .section-title {
+      font-family: var(--f-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      line-height: 1.15;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .cards-grid .card:nth-child(4),
+    .cards-grid .card:nth-child(5) {
+      grid-column: span 1;
+    }
+    /* Center the last two cards */
+    .cards-grid-5 {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 20px;
+    }
+    .cards-grid-5 .card:nth-child(1) { grid-column: 1 / 3; }
+    .cards-grid-5 .card:nth-child(2) { grid-column: 3 / 5; }
+    .cards-grid-5 .card:nth-child(3) { grid-column: 5 / 7; }
+    .cards-grid-5 .card:nth-child(4) { grid-column: 2 / 4; }
+    .cards-grid-5 .card:nth-child(5) { grid-column: 4 / 6; }
+
+    .card {
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      border: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+      transition:
+        transform  0.4s var(--ease),
+        box-shadow 0.4s var(--ease),
+        border-color 0.4s var(--ease);
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      opacity: 0;
+      transition: opacity 0.4s var(--ease);
+    }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 20px 56px rgba(0,0,0,0.07); }
+    .card:hover::before { opacity: 1; }
+    .card:nth-child(1)::before { background: var(--c-purple); }
+    .card:nth-child(2)::before { background: var(--c-blue); }
+    .card:nth-child(3)::before { background: var(--c-green); }
+    .card:nth-child(4)::before { background: var(--c-orange); }
+    .card:nth-child(5)::before { background: var(--c-red); }
+
+    .card-title {
+      font-family: var(--f-display);
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+    }
+    .card-text {
+      font-size: 0.9rem;
+      line-height: 1.78;
+      color: var(--soft);
+    }
+
+    /* ═══════════════════════════════ TOOLS ══════════════════════════════ */
+    .tools {
+      padding: 110px 48px;
+    }
+    .tools-inner { max-width: 1200px; margin: 0 auto; }
+
+    .tools-grid {
+      margin-top: 64px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .tools-grid .tool-card:last-child {
+      grid-column: 2; /* Center the 7th */
+    }
+
+    .tool-card {
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid transparent;
+      transition:
+        transform  0.4s var(--ease),
+        box-shadow 0.4s var(--ease);
+      cursor: default;
+    }
+    .tool-card:hover { transform: translateY(-4px); box-shadow: 0 20px 56px rgba(0,0,0,0.08); }
+
+    .tool-card[data-c="red"]      { background: #FDF2F1; border-color: #F0CECE; }
+    .tool-card[data-c="orange"]   { background: #FDF5EF; border-color: #F2D9C2; }
+    .tool-card[data-c="yellow"]   { background: #FDFBF0; border-color: #EEE3B0; }
+    .tool-card[data-c="green"]    { background: #F1F9F2; border-color: #C0E4C8; }
+    .tool-card[data-c="sky"]      { background: #EFF7FB; border-color: #B8DCEC; }
+    .tool-card[data-c="blue"]     { background: #F0F4FB; border-color: #BACCE8; }
+    .tool-card[data-c="purple"]   { background: #F6F0FB; border-color: #DAC6EB; }
+
+    .tool-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+    .tool-card[data-c="red"]    .tool-circle { background: var(--c-red); }
+    .tool-card[data-c="orange"] .tool-circle { background: var(--c-orange); }
+    .tool-card[data-c="yellow"] .tool-circle { background: var(--c-yellow); }
+    .tool-card[data-c="green"]  .tool-circle { background: var(--c-green); }
+    .tool-card[data-c="sky"]    .tool-circle { background: var(--c-sky); }
+    .tool-card[data-c="blue"]   .tool-circle { background: var(--c-blue); }
+    .tool-card[data-c="purple"] .tool-circle { background: var(--c-purple); }
+
+    .tool-color-label {
+      font-family: var(--f-ui);
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--soft);
+      margin-bottom: 6px;
+    }
+    .tool-name {
+      font-family: var(--f-display);
+      font-weight: 600;
+      font-size: 1.3rem;
+      line-height: 1.25;
+      margin-bottom: 14px;
+      color: var(--text);
+    }
+    .tool-desc {
+      font-size: 0.875rem;
+      line-height: 1.8;
+      color: var(--soft);
+    }
+
+    /* ═══════════════════════════════ GALLERY ════════════════════════════ */
+    .gallery {
+      padding: 0 48px 110px;
+    }
+    .gallery-inner { max-width: 1200px; margin: 0 auto; }
+    .gallery-label {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 280px 280px;
+      gap: 12px;
+    }
+    .gallery-item {
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .gallery-item:nth-child(1) { grid-column: 1; grid-row: 1; }
+    .gallery-item:nth-child(2) { grid-column: 2; grid-row: 1 / 3; }
+    .gallery-item:nth-child(3) { grid-column: 3; grid-row: 1; }
+    .gallery-item:nth-child(4) { grid-column: 1; grid-row: 2; }
+    .gallery-item:nth-child(5) { grid-column: 3; grid-row: 2; }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease);
+    }
+    .gallery-item:hover img { transform: scale(1.04); }
+
+    /* ═══════════════════════════════ TRUST ══════════════════════════════ */
+    .trust {
+      background: var(--lavender);
+      padding: 110px 48px;
+    }
+    .trust-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .trust-heading {
+      font-family: var(--f-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      line-height: 1.3;
+      margin-bottom: 28px;
+    }
+    .trust-body {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--soft);
+      margin-bottom: 52px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-bottom: 52px;
+    }
+    .stat-num {
+      font-family: var(--f-display);
+      font-weight: 400;
+      font-size: 3.2rem;
+      line-height: 1;
+      color: var(--c-purple);
+      margin-bottom: 6px;
+    }
+    .stat-label {
+      font-family: var(--f-ui);
+      font-size: 0.78rem;
+      color: var(--soft);
+      line-height: 1.4;
+    }
+
+    .clients-row {
+      border-top: 1px solid rgba(155,107,181,0.2);
+      padding-top: 40px;
+    }
+    .clients-label {
+      font-family: var(--f-ui);
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--soft);
+      margin-bottom: 18px;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .tag {
+      padding: 7px 16px;
+      border: 1px solid rgba(155,107,181,0.3);
+      border-radius: 100px;
+      font-family: var(--f-ui);
+      font-size: 0.78rem;
+      color: var(--soft);
+      background: rgba(255,255,255,0.55);
+    }
+
+    /* Credentials */
+    .trust-right { padding-top: 40px; }
+    .cred-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .cred-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: var(--soft);
+    }
+    .cred-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+
+    /* ═══════════════════════════════ TESTIMONIALS ═══════════════════════ */
+    .testimonials {
+      background: var(--cream);
+      padding: 110px 48px;
+    }
+    .testimonials-inner { max-width: 1200px; margin: 0 auto; }
+
+    .reviews-grid {
+      margin-top: 64px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .review-card {
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      border: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .review-quote-icon {
+      font-family: var(--f-display);
+      font-size: 3rem;
+      line-height: 1;
+      color: var(--c-purple);
+      opacity: 0.4;
+    }
+    .review-text {
+      font-family: var(--f-display);
+      font-style: italic;
+      font-size: 0.96rem;
+      line-height: 1.82;
+      color: var(--text);
+      flex: 1;
+    }
+    .review-author {
+      font-family: var(--f-ui);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--soft);
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    /* ═══════════════════════════════ HOW IT WORKS ═══════════════════════ */
+    .how {
+      padding: 110px 48px;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .steps {
+      margin-top: 72px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      text-align: left;
+      position: relative;
+    }
+    .step-num {
+      font-family: var(--f-display);
+      font-weight: 400;
+      font-size: 3.8rem;
+      line-height: 1;
+      color: var(--line);
+      margin-bottom: 18px;
+    }
+    .step-title {
+      font-family: var(--f-display);
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+    }
+    .step-desc {
+      font-size: 0.9rem;
+      line-height: 1.78;
+      color: var(--soft);
+    }
+
+    /* ═══════════════════════════════ CTA ════════════════════════════════ */
+    .cta {
+      background: var(--dark);
+      color: white;
+      padding: 110px 48px;
+      text-align: center;
+    }
+    .cta-inner { max-width: 680px; margin: 0 auto; }
+    .cta .label { color: rgba(255,255,255,0.45); margin-bottom: 32px; display: block; }
+
+    .cta-heading {
+      font-family: var(--f-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(2.4rem, 4vw, 3.8rem);
+      line-height: 1.15;
+      color: white;
+      margin-bottom: 24px;
+    }
+    .cta-text {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 48px;
+    }
+    .cta-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-light {
+      background: white;
+      color: var(--dark);
+    }
+    .btn-light:hover {
+      background: var(--c-purple);
+      color: white;
+      box-shadow: 0 10px 28px rgba(155,107,181,0.4);
+      transform: translateY(-2px);
+    }
+    .btn-outline-light {
+      background: transparent;
+      color: white;
+      border: 1.5px solid rgba(255,255,255,0.3);
+    }
+    .btn-outline-light:hover {
+      background: white;
+      color: var(--dark);
+      border-color: white;
+      transform: translateY(-2px);
+    }
+
+    /* ═══════════════════════════════ FOOTER ════════════════════════════ */
+    footer {
+      padding: 40px 48px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-name {
+      font-family: var(--f-display);
+      font-style: italic;
+      font-size: 1.1rem;
+    }
+    .footer-copy {
+      font-family: var(--f-ui);
+      font-size: 0.75rem;
+      color: var(--soft);
+    }
+    .footer-tg a {
+      font-family: var(--f-ui);
+      font-size: 0.78rem;
+      color: var(--soft);
+      transition: color 0.2s;
+    }
+    .footer-tg a:hover { color: var(--c-purple); }
+
+    /* ═══════════════════════════════ SCROLL REVEAL ══════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition:
+        opacity  0.55s var(--ease),
+        transform 0.55s var(--ease);
+      transition-delay: var(--stagger-delay, 0ms);
+      will-change: opacity, transform;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ═══════════════════════════════ ANIMATIONS ═════════════════════════ */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(22px) scale(0.99); }
+      to   { opacity: 1; transform: translateY(0)    scale(1); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; scale: 0.98; }
+      to   { opacity: 1; scale: 1; }
+    }
+
+    /* Hero floating dots */
+    @keyframes floatA {
+      0%   { transform: translate(0, 0); }
+      30%  { transform: translate(14px, -20px); }
+      65%  { transform: translate(-10px, 12px); }
+      100% { transform: translate(0, 0); }
+    }
+    @keyframes floatB {
+      0%   { transform: translate(0, 0); }
+      40%  { transform: translate(-16px, 14px); }
+      75%  { transform: translate(10px, -10px); }
+      100% { transform: translate(0, 0); }
+    }
+    @keyframes floatC {
+      0%   { transform: translate(0, 0); }
+      45%  { transform: translate(10px, 16px); }
+      100% { transform: translate(0, 0); }
+    }
+    .hero-dot-1 { animation: floatA 7s ease-in-out infinite; }
+    .hero-dot-2 { animation: floatB 9s ease-in-out infinite; }
+    .hero-dot-3 { animation: floatC 6s ease-in-out infinite; }
+
+    /* Philosophy logo pulse — applied to inner img to avoid conflicting with reveal transform */
+    @keyframes logoPulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.07); }
+    }
+    .philosophy-logo img { animation: logoPulse 3.5s ease-in-out infinite; }
+
+    /* ═══════════════════════════════ RESPONSIVE ═════════════════════════ */
+    @media (max-width: 1024px) {
+      .hero        { padding: 90px 32px 64px; gap: 40px; }
+      .tools-grid  { grid-template-columns: repeat(2, 1fr); }
+      .tools-grid .tool-card:last-child { grid-column: auto; }
+      .trust-inner { gap: 48px; }
+      .cards-grid-5 .card:nth-child(1) { grid-column: 1 / 4; }
+      .cards-grid-5 .card:nth-child(2) { grid-column: 4 / 7; }
+      .cards-grid-5 .card:nth-child(3) { grid-column: 1 / 3; }
+      .cards-grid-5 .card:nth-child(4) { grid-column: 3 / 5; }
+      .cards-grid-5 .card:nth-child(5) { grid-column: 5 / 7; }
+    }
+
+    @media (max-width: 768px) {
+      /* Nav */
+      .nav          { padding: 0 20px; }
+      .nav-links    { display: none; }
+      .burger       { display: flex; }
+
+      /* Hero */
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 90px 24px 60px;
+        gap: 48px;
+        text-align: center;
+      }
+      .hero-visual  { order: -1; }
+      .hero-photo-frame { aspect-ratio: 1 / 1; border-radius: 50%; max-width: 300px; margin: 0 auto; }
+      .hero-logo-badge  { left: 50%; transform: translateX(-50%); bottom: -24px; }
+      .hero-cta     { justify-content: center; }
+      .hero-desc    { margin: 0 auto 44px; }
+      .hero-dot-2   { left: 10px; }
+
+      /* Sections */
+      .philosophy,
+      .for-whom,
+      .tools,
+      .gallery,
+      .trust,
+      .testimonials,
+      .cta           { padding: 80px 24px; }
+      .how           { padding: 80px 24px; }
+
+      /* Grids → single column */
+      .cards-grid-5  { grid-template-columns: 1fr; }
+      .cards-grid-5 .card { grid-column: auto !important; }
+      .tools-grid    { grid-template-columns: 1fr; }
+      .tools-grid .tool-card:last-child { grid-column: auto; }
+      .trust-inner   { grid-template-columns: 1fr; gap: 40px; }
+      .trust-right   { padding-top: 0; }
+      .reviews-grid  { grid-template-columns: 1fr; }
+      .steps         { grid-template-columns: 1fr; gap: 40px; }
+      .steps::before { display: none; }
+
+      /* Gallery */
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 200px 200px 200px;
+      }
+      .gallery-item:nth-child(2) { grid-row: auto; }
+      .gallery-item:nth-child(4) { display: none; }
+      .gallery-item:nth-child(5) { display: none; }
+
+      /* Footer */
+      footer {
+        flex-direction: column;
+        gap: 14px;
+        text-align: center;
+        padding: 28px 24px;
+      }
+      .footer-tg { order: -1; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-name { font-size: 3.2rem; }
+      .gallery-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: 240px 200px 240px;
+      }
+      .gallery-item:nth-child(1) { grid-column: auto; grid-row: auto; }
+      .gallery-item:nth-child(2) { grid-column: auto; grid-row: auto; }
+      .gallery-item:nth-child(3) { grid-column: auto; grid-row: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ NAV ══════════════════════════════════ -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-brand">
+    <div class="nav-logo">
+      <img src="logo.png" alt="Логотип">
+    </div>
+    <span class="nav-name">Анастасия Анохина</span>
+  </a>
+
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#philosophy">Философия</a></li>
+    <li><a href="#tools">Инструменты</a></li>
+    <li><a href="#about">Обо мне</a></li>
+    <li><a href="#contact">Контакт</a></li>
+  </ul>
+
+  <button class="burger" id="burger" aria-label="Меню">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="nav-mobile" id="nav-mobile">
+  <ul>
+    <li><a href="#philosophy" class="mob-link">Философия</a></li>
+    <li><a href="#tools"      class="mob-link">Инструменты</a></li>
+    <li><a href="#about"      class="mob-link">Обо мне</a></li>
+    <li><a href="#reviews"    class="mob-link">Отзывы</a></li>
+    <li><a href="#contact"    class="mob-link">Контакт</a></li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════ HERO ══════════════════════════════════ -->
+<section class="hero" id="home">
+
+  <div class="hero-content">
+    <p class="label hero-eyebrow">Тренер творческих состояний</p>
+    <h1 class="hero-name">Анастасия<br>Анохина</h1>
+    <p class="hero-title">Баланс духовного и материального</p>
+    <p class="hero-desc">
+      Помогаю найти опору в балансе духовного и материального
+      и поверить в свои силы — через юриспруденцию, игру,
+      творчество, аромат и тишину.
+    </p>
+    <div class="hero-cta">
+      <a href="https://t.me/strongfamilytree" class="btn btn-dark" target="_blank">
+        Написать в Telegram <span class="btn-arrow">→</span>
+      </a>
+      <a href="#tools" class="btn btn-outline">
+        Выбрать инструмент
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-photo-wrap">
+      <div class="hero-dot hero-dot-1"></div>
+      <div class="hero-dot hero-dot-2"></div>
+      <div class="hero-dot hero-dot-3"></div>
+      <div class="hero-photo-frame">
+        <img src="photo/photo_2026-03-05_23-10-47.jpg" alt="Анастасия Анохина">
+      </div>
+      <div class="hero-logo-badge">
+        <img src="logo.png" alt="Логотип Анастасии Анохиной">
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════ MARQUEE ══════════════════════════════ -->
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-track">
+    <!-- Duplicate content for seamless loop -->
+    <span class="marquee-text">Юрист <span class="marquee-dot">·</span> Игропрактик <span class="marquee-dot">·</span> Арт-терапевт <span class="marquee-dot">·</span> Ароматерапевт <span class="marquee-dot">·</span> Психолог-консультант <span class="marquee-dot">·</span> Эстетический коуч <span class="marquee-dot">·</span> Кристаллотерапевт <span class="marquee-dot">·</span> 10+ лет практики <span class="marquee-dot">·</span></span>
+    <span class="marquee-text">Юрист <span class="marquee-dot">·</span> Игропрактик <span class="marquee-dot">·</span> Арт-терапевт <span class="marquee-dot">·</span> Ароматерапевт <span class="marquee-dot">·</span> Психолог-консультант <span class="marquee-dot">·</span> Эстетический коуч <span class="marquee-dot">·</span> Кристаллотерапевт <span class="marquee-dot">·</span> 10+ лет практики <span class="marquee-dot">·</span></span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ PHILOSOPHY ═══════════════════════════ -->
+<section class="philosophy" id="philosophy">
+  <span class="label reveal">Философия</span>
+
+  <div class="philosophy-logo reveal">
+    <img src="logo.png" alt="Спираль логотипа">
+  </div>
+
+  <blockquote class="philosophy-quote reveal">
+    «Знаешь этот вечный выбор:<br>
+    или деньги, или призвание?<br>
+    Я верю, что гармония возможна.»
+  </blockquote>
+
+  <div class="philosophy-line reveal"></div>
+
+  <p class="philosophy-text reveal">
+    Мой логотип — спираль золотого сечения, раскручивающаяся по часовой стрелке.
+    Это символ гармоничного движения вперёд, развития, динамики, баланса духовного
+    и материального. Каждый цветной круг на спирали — отдельный инструмент,
+    через который я помогаю людям возвращаться к себе.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════ FOR WHOM ═════════════════════════════ -->
+<section class="for-whom" id="for-whom">
+  <div class="for-whom-inner">
+    <div class="section-head center reveal">
+      <span class="label">Тебе ко мне, если...</span>
+      <h2 class="section-title">Узнаёшь себя?</h2>
+    </div>
+
+    <div class="cards-grid-5">
+      <div class="card reveal">
+        <h3 class="card-title">Ты эксперт</h3>
+        <p class="card-text">Психолог, коуч, помогающий практик, который хочет выйти из тени, легализоваться и перестать бояться налогов. Я помогу тебе спать спокойно.</p>
+      </div>
+      <div class="card reveal">
+        <h3 class="card-title">Ты в тупике</h3>
+        <p class="card-text">Работа есть, а радости нет. Сила есть, воля есть, а сила воли где-то заблудилась. Хочется смысла, но непонятно, куда идти.</p>
+      </div>
+      <div class="card reveal">
+        <h3 class="card-title">Потерян контакт с телом</h3>
+        <p class="card-text">Живёшь в «голове», вечно в стрессе, не помнишь, что такое просто кайфовать от жизни.</p>
+      </div>
+      <div class="card reveal">
+        <h3 class="card-title">Хочешь проявиться</h3>
+        <p class="card-text">Ты классный специалист, но стесняешься заявлять о себе, боишься критики, не знаешь, как говорить о своей ценности.</p>
+      </div>
+      <div class="card reveal">
+        <h3 class="card-title">Ты руководитель</h3>
+        <p class="card-text">Хочешь прокачать soft skills команды или упаковать свои проекты юридически грамотно.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ TOOLS ════════════════════════════════ -->
+<section class="tools" id="tools">
+  <div class="tools-inner">
+    <div class="section-head center reveal">
+      <span class="label">Инструменты</span>
+      <h2 class="section-title">7 граней твоей гармонии</h2>
+      <p style="font-size:1rem; color:var(--soft); margin-top:12px; font-family:var(--f-body); line-height:1.75; max-width:520px; text-align:center;">
+        Каждый инструмент — отдельный путь. Выбери тот, что откликается прямо сейчас.
+      </p>
+    </div>
+
+    <div class="tools-grid">
+
+      <div class="tool-card reveal" data-c="red">
+        <div class="tool-circle">⚖️</div>
+        <p class="tool-color-label">Красный</p>
+        <h3 class="tool-name">Понятный юрист для творческих людей</h3>
+        <p class="tool-desc">Помогаю развивать некоммерческие проекты в сферах культуры, спорта, кино, шоу-бизнеса. Помогаю экспертам выйти из тени, легализоваться и работать без страха.</p>
+      </div>
+
+      <div class="tool-card reveal" data-c="orange">
+        <div class="tool-circle">🎲</div>
+        <p class="tool-color-label">Оранжевый</p>
+        <h3 class="tool-name">Игропрактик</h3>
+        <p class="tool-desc">Провожу игровые тренинги — корпоративные, групповые и индивидуальные. Темы: деньги, отношения, целеполагание, предназначение, женские тренинги, турниры для мужчин.</p>
+      </div>
+
+      <div class="tool-card reveal" data-c="yellow">
+        <div class="tool-circle">🎨</div>
+        <p class="tool-color-label">Жёлтый</p>
+        <h3 class="tool-name">Арт-терапия</h3>
+        <p class="tool-desc">Осознанное рисование, эстетический коучинг. Работа с сознанием и бессознательным через творческие техники. Рисовать, чтобы понять. Даже если ты не умеешь.</p>
+      </div>
+
+      <div class="tool-card reveal" data-c="green">
+        <div class="tool-circle">🌿</div>
+        <p class="tool-color-label">Зелёный</p>
+        <h3 class="tool-name">Аромапсихология</h3>
+        <p class="tool-desc">Создаю ресурсные ароматы и косметику индивидуально, под твой запрос. Мягкие трансформации, возвращение к телесности и балансу. Сердце моих практик.</p>
+      </div>
+
+      <div class="tool-card reveal" data-c="sky">
+        <div class="tool-circle">💎</div>
+        <p class="tool-color-label">Голубой</p>
+        <h3 class="tool-name">Кристаллизация успеха</h3>
+        <p class="tool-desc">Создание ресурсных украшений и кристаллов. Раскрытие твоих сильных сторон, твоей многогранности. Больше энергии и чётко спланированные действия.</p>
+      </div>
+
+      <div class="tool-card reveal" data-c="blue">
+        <div class="tool-circle">✨</div>
+        <p class="tool-color-label">Синий</p>
+        <h3 class="tool-name">Полевые практики</h3>
+        <p class="tool-desc">Медитации. Расстановки. Работа с полем. Восстановим связь с Родом и пространством. Ты научишься слышать свой внутренний голос.</p>
+      </div>
+
+      <div class="tool-card reveal" data-c="purple">
+        <div class="tool-circle">🌙</div>
+        <p class="tool-color-label">Фиолетовый</p>
+        <h3 class="tool-name">Связь с Высшим Я</h3>
+        <p class="tool-desc">Этот круг — не про способы. Он про связь с твоей Душой. Если потерян смысл — это тот запрос, с которым можно прийти.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ GALLERY ══════════════════════════════ -->
+<section class="gallery">
+  <div class="gallery-inner">
+    <div class="gallery-label reveal">
+      <span class="label">В работе</span>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item reveal">
+        <img src="photo/photo_2026-03-05_23-11-51.jpg" alt="Игровая практика">
+      </div>
+      <div class="gallery-item reveal">
+        <img src="photo/photo_2026-03-05_23-12-01.jpg" alt="Работа с участниками">
+      </div>
+      <div class="gallery-item reveal">
+        <img src="photo/photo_2026-03-05_23-11-57.jpg" alt="Ароматерапия — масла">
+      </div>
+      <div class="gallery-item reveal">
+        <img src="photo/photo_2026-03-05_23-10-59.jpg" alt="Аромапсихология">
+      </div>
+      <div class="gallery-item reveal">
+        <img src="photo/photo_2026-03-05_23-11-44.jpg" alt="Арт-терапия">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ TRUST ════════════════════════════════ -->
+<section class="trust" id="about">
+  <div class="trust-inner">
+
+    <div>
+      <span class="label reveal" style="display:block; margin-bottom:28px;">Почему мне можно доверять</span>
+      <h2 class="trust-heading reveal">Опыт, структура<br>и нацеленность на результат</h2>
+      <p class="trust-body reveal">
+        Работаю с опорой на ресурсы и скрытый потенциал клиентов.
+        Веду корпоративные, групповые и индивидуальные тренинги с 2014 года.
+      </p>
+
+      <div class="stats reveal">
+        <div>
+          <div class="stat-num" data-target="10" data-suffix="+">10+</div>
+          <div class="stat-label">лет практики</div>
+        </div>
+        <div>
+          <div class="stat-num" data-target="30" data-suffix="+">30+</div>
+          <div class="stat-label">ресурсных игр</div>
+        </div>
+        <div>
+          <div class="stat-num" data-target="7" data-suffix="">7</div>
+          <div class="stat-label">направлений работы</div>
+        </div>
+        <div>
+          <div class="stat-num" data-target="600" data-suffix="+">600+</div>
+          <div class="stat-label">участников сообщества</div>
+        </div>
+      </div>
+
+      <div class="clients-row reveal">
+        <p class="clients-label">Среди клиентов</p>
+        <div class="tags">
+          <span class="tag">Gulliver</span>
+          <span class="tag">Crocs Inc.</span>
+          <span class="tag">Max Capital</span>
+          <span class="tag">Академия Брайана Трейси</span>
+          <span class="tag">Минэкономики РФ</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="trust-right">
+      <ul class="cred-list">
+        <li class="cred-item reveal">
+          <span class="cred-dot" style="background:var(--c-purple)"></span>
+          Юрист, сертифицированный игропрактик, арт-терапевт, ароматерапевт, психолог-консультант, эстетический коуч
+        </li>
+        <li class="cred-item reveal">
+          <span class="cred-dot" style="background:var(--c-blue)"></span>
+          Партнёр Академии Брайана Трейси
+        </li>
+        <li class="cred-item reveal">
+          <span class="cred-dot" style="background:var(--c-green)"></span>
+          Приглашённый игропрактик «Семейного финансового фестиваля» при Минэкономики РФ
+        </li>
+        <li class="cred-item reveal">
+          <span class="cred-dot" style="background:var(--c-yellow)"></span>
+          Лучший игропрактик 2021 года по версии участников фестиваля «Большая игра»
+        </li>
+        <li class="cred-item reveal">
+          <span class="cred-dot" style="background:var(--c-orange)"></span>
+          Член Совета Лидеров Сообщества игропрактиков (более 600 человек)
+        </li>
+        <li class="cred-item reveal">
+          <span class="cred-dot" style="background:var(--c-red)"></span>
+          Спикер конференции «Психология: вызовы современности»
+        </li>
+        <li class="cred-item reveal">
+          <span class="cred-dot" style="background:var(--c-sky)"></span>
+          Соорганизатор детских игровых фестивалей FlixaFest
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ TESTIMONIALS ═════════════════════════ -->
+<section class="testimonials" id="reviews">
+  <div class="testimonials-inner">
+    <div class="section-head center reveal">
+      <span class="label">Отзывы</span>
+      <h2 class="section-title">Что говорят участники</h2>
+    </div>
+
+    <div class="reviews-grid">
+
+      <div class="review-card reveal">
+        <div class="review-quote-icon">"</div>
+        <p class="review-text">
+          Поняла, что хочу научиться жить с удовольствием, смакуя каждый день.
+          Раньше было ощущение, что живу «на черновик». Но сейчас пришло время
+          жить по-настоящему. Так радостно от этого осознания!
+        </p>
+        <p class="review-author">Участница игровой практики</p>
+      </div>
+
+      <div class="review-card reveal">
+        <div class="review-quote-icon">"</div>
+        <p class="review-text">
+          После нашей последней встречи мне кажется даже воздух в пространстве
+          изменился. Активности больше стало. Подняли с супругом очень важную
+          тему в нашей жизни, и что приятно — я не вижу сопротивления, как раньше.
+        </p>
+        <p class="review-author">Участница индивидуальной работы</p>
+      </div>
+
+      <div class="review-card reveal">
+        <div class="review-quote-icon">"</div>
+        <p class="review-text">
+          Вы невероятные, с вами легко, комфортно и приятно. Нужно осмыслить,
+          переварить, утрамбовать, вздохнуть, принять и встретиться снова!
+        </p>
+        <p class="review-author">Участница групповой сессии</p>
+      </div>
+
+      <div class="review-card reveal">
+        <div class="review-quote-icon">"</div>
+        <p class="review-text">
+          После игры запрос был на откладывание не менее 4 000 ₽. В итоге
+          в этом месяце в копилке 5 500 — без ущерба ежедневным потребностям.
+          Результат налицо!
+        </p>
+        <p class="review-author">Участница финансовой игры</p>
+      </div>
+
+      <div class="review-card reveal">
+        <div class="review-quote-icon">"</div>
+        <p class="review-text">
+          Огромное Вам человеческое спасибо за опыт, за знания, за возможности,
+          за поле и всё, что ещё раскроется дальше!!!
+        </p>
+        <p class="review-author">Участница полевых практик</p>
+      </div>
+
+      <div class="review-card reveal">
+        <div class="review-quote-icon">"</div>
+        <p class="review-text">
+          Благодарю Вас за чудесную рецензию, за высокую оценку моей работы.
+          Для меня это оооочень приятно. Вы проявили себя как строгий и
+          справедливый наставник. Всех благ!
+        </p>
+        <p class="review-author">Студентка курса</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ HOW IT WORKS ═════════════════════════ -->
+<section class="how" id="how">
+  <span class="label reveal" style="display:block; margin-bottom:16px;">Как начать</span>
+  <h2 class="section-title reveal">Три шага к себе</h2>
+
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <h3 class="step-title">Выбираешь, что откликается</h3>
+      <p class="step-desc">Или пишешь «не знаю, что выбрать, но есть запрос» — это тоже отличное начало.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">02</div>
+      <h3 class="step-title">Приходишь на встречу</h3>
+      <p class="step-desc">Очно или онлайн. Вместе определим, какой инструмент подойдёт тебе прямо сейчас.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">03</div>
+      <h3 class="step-title">Получаешь ресурс</h3>
+      <p class="step-desc">Ясность и чёткий план. Уходишь с опорой, а не с новым списком задач.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ CTA ══════════════════════════════════ -->
+<section class="cta" id="contact">
+  <div class="cta-inner">
+    <span class="label">Начать</span>
+    <h2 class="cta-heading reveal">
+      Готова познакомиться<br>с твоим запросом
+    </h2>
+    <p class="cta-text reveal">
+      В моём Telegram-канале я бережно передаю то, что знаю и практикую сама.
+      Даю чистую пользу, без воды. Подписывайся, чтобы быть в контакте.
+    </p>
+    <div class="cta-buttons reveal">
+      <a href="https://t.me/strongfamilytree" class="btn btn-light" target="_blank">
+        Написать в Telegram <span class="btn-arrow">→</span>
+      </a>
+      <a href="https://t.me/strongfamilytree" class="btn btn-outline-light" target="_blank">
+        Подписаться на канал
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
+<footer>
+  <div class="footer-name">Анастасия Анохина</div>
+  <div class="footer-copy">Тренер творческих состояний · 2025</div>
+  <div class="footer-tg">
+    <a href="https://t.me/strongfamilytree" target="_blank">Telegram →</a>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════ SCRIPTS ══════════════════════════════ -->
+<script>
+  // Nav scroll shadow
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  // Hamburger menu
+  const burger   = document.getElementById('burger');
+  const navMobile = document.getElementById('nav-mobile');
+  const mobLinks  = document.querySelectorAll('.mob-link');
+
+  burger.addEventListener('click', () => {
+    const isOpen = navMobile.classList.toggle('open');
+    burger.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  mobLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      navMobile.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // ── Stagger delays ──────────────────────────────────────────────────
+  // Pre-assign CSS --stagger-delay to reveal-children of each group,
+  // so CSS handles timing — no setTimeout needed.
+  const STEP = 85; // ms between siblings
+  const MAX_DELAY = 400; // cap so last card isn't too slow
+
+  const staggerSelectors = [
+    { parent: '.cards-grid-5',   child: '.card' },
+    { parent: '.tools-grid',     child: '.tool-card' },
+    { parent: '.reviews-grid',   child: '.review-card' },
+    { parent: '.steps',          child: '.step' },
+    { parent: '.cred-list',      child: '.cred-item' },
+    { parent: '.gallery-grid',   child: '.gallery-item' },
+    { parent: '.stats',          child: 'div' },
+    { parent: '.tags',           child: '.tag' },
+  ];
+
+  staggerSelectors.forEach(({ parent, child }) => {
+    document.querySelectorAll(parent).forEach(group => {
+      group.querySelectorAll(child).forEach((el, i) => {
+        const delay = Math.min(i * STEP, MAX_DELAY);
+        el.style.setProperty('--stagger-delay', delay + 'ms');
+      });
+    });
+  });
+
+  // ── Scroll reveal ────────────────────────────────────────────────────
+  // Observer fires → add .visible; CSS transition-delay handles stagger.
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('visible');
+      revealObs.unobserve(entry.target);
+    });
+  }, {
+    threshold: 0.08,
+    rootMargin: '0px 0px -32px 0px',
+  });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  // ── CountUp for trust stats ──────────────────────────────────────────
+  function animateCount(el) {
+    const target = parseInt(el.dataset.target, 10);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1600;
+    const startTime = performance.now();
+
+    function tick(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // easeOutQuart for satisfying deceleration
+      const eased = 1 - Math.pow(1 - progress, 4);
+      el.textContent = Math.round(eased * target) + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const countObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      animateCount(entry.target);
+      countObs.unobserve(entry.target);
+    });
+  }, { threshold: 0.6 });
+
+  document.querySelectorAll('.stat-num[data-target]').forEach(el => countObs.observe(el));
+</script>
+
+</body>
+</html>
