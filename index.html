@@ -315,9 +315,9 @@
       overflow: hidden;
       position: relative;
     }
-    /* Leave breathing room above the head — golden ratio: eyes at ~38% from top */
+    /* Golden ratio: eyes at ~38% from top of frame */
     .hero-photo-frame img {
-      object-position: center 5%;
+      object-position: center 10%;
     }
 
     /* Decorative color dots echoing the logo */
@@ -607,8 +607,7 @@
     .gallery-item:nth-child(4) { grid-column: 1; grid-row: 2; }
     .gallery-item:nth-child(5) { grid-column: 3; grid-row: 2; }
     .gallery-item:nth-child(6) { grid-column: 1; grid-row: 3; }
-    .gallery-item:nth-child(7) { grid-column: 2; grid-row: 3; }
-    .gallery-item:nth-child(8) { grid-column: 3; grid-row: 3; }
+    .gallery-item:nth-child(7) { grid-column: 2 / 4; grid-row: 3; }
 
     .gallery-item img {
       width: 100%;
@@ -1002,14 +1001,7 @@
         grid-template-columns: 1fr 1fr;
         grid-template-rows: repeat(4, 200px);
       }
-      .gallery-item:nth-child(1),
-      .gallery-item:nth-child(2),
-      .gallery-item:nth-child(3),
-      .gallery-item:nth-child(4),
-      .gallery-item:nth-child(5),
-      .gallery-item:nth-child(6),
-      .gallery-item:nth-child(7),
-      .gallery-item:nth-child(8) { grid-column: auto; grid-row: auto; display: block; }
+      .gallery-item { grid-column: auto !important; grid-row: auto !important; display: block; }
 
       /* Footer */
       footer {
@@ -1025,7 +1017,7 @@
       .hero-name { font-size: 3.2rem; }
       .gallery-grid {
         grid-template-columns: 1fr;
-        grid-template-rows: repeat(8, 220px);
+        grid-template-rows: repeat(7, 220px);
       }
     }
   </style>
@@ -1094,7 +1086,7 @@
       <div class="hero-dot hero-dot-2"></div>
       <div class="hero-dot hero-dot-3"></div>
       <div class="hero-photo-frame">
-        <img src="photo/photo_2026-03-05_23-10-47.jpg" alt="Анастасия Анохина">
+        <img src="photo-new/Anastasia.JPG" alt="Анастасия Анохина">
       </div>
       <div class="hero-logo-badge">
         <img src="logo.png" alt="Логотип Анастасии Анохиной">
@@ -1242,28 +1234,25 @@
     </div>
     <div class="gallery-grid">
       <div class="gallery-item reveal">
-        <img src="photo/photo_2026-03-05_23-12-01.jpg" alt="Работа с участниками">
+        <img src="photo-new/1.jpg" alt="Работа с участниками">
       </div>
       <div class="gallery-item reveal">
-        <img src="photo/photo_2026-03-05_23-11-51.jpg" alt="Игровая практика">
+        <img src="photo-new/2.jpg" alt="Private Money ExpoForum">
       </div>
       <div class="gallery-item reveal">
-        <img src="photo/photo_2026-03-03_14-27-11.jpg" alt="Игра со взрослыми на форуме">
+        <img src="photo-new/3.jpg" alt="Сообщество игропрактиков">
       </div>
       <div class="gallery-item reveal">
-        <img src="photo/photo_2026-03-05_23-11-57.jpg" alt="Ароматерапия — масла">
+        <img src="photo-new/4.jpg" alt="Игра со взрослыми на форуме">
       </div>
       <div class="gallery-item reveal">
-        <img src="photo/photo_2026-03-05_23-11-12.jpg" alt="Работа с участниками на конференции">
+        <img src="photo-new/5.jpg" alt="Игровая практика с детьми">
       </div>
       <div class="gallery-item reveal">
-        <img src="photo/photo_2026-03-05_23-11-44.jpg" alt="Арт-терапия">
+        <img src="photo-new/6.jpg" alt="Ароматерапия — масла doTERRA">
       </div>
       <div class="gallery-item reveal">
-        <img src="photo/photo_2026-03-05_23-11-27.jpg" alt="Private Money ExpoForum">
-      </div>
-      <div class="gallery-item reveal">
-        <img src="photo/photo_2026-03-05_23-10-59.jpg" alt="Аромапсихология">
+        <img src="photo-new/7.jpg" alt="Игровое поле">
       </div>
     </div>
   </div>
